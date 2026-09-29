@@ -1,0 +1,95 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Uploaded images go here (inside the site repo)
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "reels"
+    label: "Reels — Watch section"
+    files:
+      - name: "all"
+        label: "All reels"
+        file: "content/reels.json"
+        fields:
+          - label: "Reels"
+            name: "reels"
+            widget: "list"
+            summary: "{{fields.issue}} ({{fields.year}})"
+            fields:
+              - { label: "Issue", name: "issue", widget: "string", hint: "The topic of the reel" }
+              - { label: "Format", name: "format", widget: "string", default: "Reel · Vertical" }
+              - { label: "Views", name: "views", widget: "string", default: "—" }
+              - { label: "Year", name: "year", widget: "string" }
+              - { label: "Thumbnail image", name: "thumb", widget: "image", required: false, hint: "Vertical cover shown on the card" }
+              - { label: "Video link", name: "video_url", widget: "string", required: false, hint: "YouTube / TikTok / Behance link — the card opens it when clicked" }
+
+  - name: "gallery"
+    label: "Gallery — Visualise your cause"
+    files:
+      - name: "all"
+        label: "All gallery items"
+        file: "content/gallery.json"
+        fields:
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.caption}} — {{fields.category}}"
+            fields:
+              - { label: "Image", name: "src", widget: "image" }
+              - { label: "Caption", name: "caption", widget: "string" }
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options:
+                  - { label: "Campaigns", value: "campaigns" }
+                  - { label: "Posters", value: "posters" }
+                  - { label: "Identity", value: "identity" }
+                  - { label: "Social", value: "social" }
+                  - { label: "Illustration", value: "illustration" }
+                  - { label: "Art Direction", value: "art-direction" }
+                  - { label: "Web", value: "web" }
+
+  - name: "cases"
+    label: "Case studies — From → To"
+    files:
+      - name: "all"
+        label: "All case studies"
+        file: "content/cases.json"
+        fields:
+          - label: "Cases"
+            name: "cases"
+            widget: "list"
+            summary: "{{fields.from}} → {{fields.to}}"
+            fields:
+              - { label: "From", name: "from", widget: "string" }
+              - { label: "To", name: "to", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "What changed because of the work?", name: "impact", widget: "text" }
+              - label: "Status"
+                name: "status"
+                widget: "select"
+                default: "published"
+                options:
+                  - { label: "Published", value: "published" }
+                  - { label: "Draft — refining soon", value: "draft" }
+                  - { label: "Coming soon", value: "coming-soon" }
+
+  - name: "impact"
+    label: "Impact section"
+    files:
+      - name: "all"
+        label: "Impact cards"
+        file: "content/impact.json"
+        fields:
+          - label: "Cards"
+            name: "cards"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "text" }
+          - { label: "Note under the cards", name: "note", widget: "text" }
