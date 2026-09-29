@@ -42,9 +42,11 @@
   .mono{font-family:'JetBrains Mono',monospace}
   .wrap{max-width:1280px;margin:0 auto;padding-left:clamp(20px,4vw,48px);padding-right:clamp(20px,4vw,48px)}
   #clients{padding-top:30px;padding-bottom:30px}
-  .client-row{display:flex;flex-wrap:wrap;gap:12px 34px;margin-top:14px;align-items:baseline}
+  .client-row{display:flex;flex-wrap:wrap;gap:14px 34px;margin-top:16px;align-items:center}
+  .client-row img{height:46px;width:auto;filter:grayscale(1);opacity:.72;transition:filter .25s,opacity .25s}
+  .client-row img:hover{filter:none;opacity:1}
   .client-row span{font-size:19px;font-weight:600;letter-spacing:.03em;color:var(--muted);white-space:nowrap}
-  @media(max-width:640px){.client-row span{font-size:16px;white-space:normal}}
+  @media(max-width:640px){.client-row{gap:12px 22px}.client-row img{height:38px}.client-row span{font-size:16px;white-space:normal}}
   section{padding-top:52px;padding-bottom:52px;border-top:1px solid var(--line)}
   h1,h2,h3{font-weight:500;text-transform:uppercase;line-height:1.08;text-wrap:balance}
   .kicker{
@@ -338,9 +340,10 @@
   <div class="wrap">
     <p class="kicker">Worked with</p>
     <div class="client-row">
-      <span>Amnesty International</span>
-      <span>Transnational Institute</span>
-      <span>Jeem.me</span>
+      <img src="images/logos/amnesty.png" alt="Amnesty International" loading="lazy">
+      <img src="images/logos/tni.png" alt="Transnational Institute" loading="lazy">
+      <img src="images/logos/jeem.png" alt="Jeem.me" loading="lazy">
+      <img src="images/logos/ita.png" alt="Internationaal Theater Amsterdam" loading="lazy">
       <span>Tarikhna Hna</span>
       <span>Tanit</span>
       <span>Balacona</span>
@@ -583,7 +586,7 @@
           ${r.thumb ? imgTag(r.thumb, r.issue) : ''}
           <span class="playbtn">▶</span>
         </span>
-        <span class="reel-cap"><span>${esc(r.issue)}</span><span class="views">${esc(r.views || '')}</span></span>
+        <span class="reel-cap"><span>${esc(r.issue)}</span>${r.views && r.views !== '—' ? `<span class="views">${esc(r.views)}</span>` : ''}</span>
       </button>`).join('');
     track.querySelectorAll('.reel').forEach(btn => {
       btn.addEventListener('click', () => openReelModal(reelsData[Number(btn.dataset.reel)]));
@@ -679,7 +682,7 @@
         <span class="ft-label">${esc(c.from)} → ${esc(c.to)}</span>
         <h3>${esc(c.title)}</h3>
         <p class="desc">${esc(c.description)}</p>
-        <div class="ft-impact"><strong>What changed because of the work?</strong>${esc(c.impact)}</div>
+        ${c.impact && c.impact !== '—' ? `<div class="ft-impact"><strong>What changed because of the work?</strong>${esc(c.impact)}</div>` : ''}
       </article>`;
     }).join('');
     watchReveals(grid);
