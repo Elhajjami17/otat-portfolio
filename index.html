@@ -164,6 +164,25 @@
   .reel-cap{display:flex;justify-content:space-between;gap:6px;font-size:14px;align-items:baseline}
   .reel-cap .views{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap}
 
+  /* ---------- VIDEO GRID ---------- */
+  .video-sub{margin:36px 0 14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:20px 14px}
+  .video{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+  .video:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+  .video-thumb{
+    display:block;aspect-ratio:16/9;width:100%;position:relative;border:1px solid var(--line);border-radius:4px;
+    overflow:hidden;background:var(--card);transition:border-color .2s;
+  }
+  .video:hover .video-thumb{border-color:var(--ink)}
+  .video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .video-thumb .playbtn{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:42px;height:42px;border-radius:50%;background:rgba(29,29,27,.85);color:var(--bg);
+    display:flex;align-items:center;justify-content:center;font-size:13px;padding-left:3px;
+  }
+  .video-cap{display:flex;flex-direction:column;gap:2px;font-size:14px}
+  .video-cap .meta{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px}
+
   /* ---------- FROM TO ---------- */
   .ft-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
   .ft-card{
@@ -320,7 +339,7 @@
       <div>
         <span class="kicker">Video</span>
         <h2 class="sec-title">Make it <em>watchable</em></h2>
-        <p class="sec-sub">Vertical-first, built for the feed. Click a reel for details.</p>
+        <p class="sec-sub">Reels and videos from the archive. Click any card for details.</p>
       </div>
       <div class="reel-nav">
         <button class="round-btn" id="reelPrev" aria-label="Previous">←</button>
@@ -330,6 +349,8 @@
   </div>
   <div class="wrap">
     <div class="reel-track" id="reelTrack"></div>
+    <h3 class="video-sub reveal" id="videoSub">More videos</h3>
+    <div class="video-grid" id="videoGrid"></div>
   </div>
 </section>
 
@@ -474,10 +495,11 @@
   let reelsData = [];
 
   function openReelModal(r){
+    const kind = (r.format || '').includes('Vertical') ? 'Reel' : 'Video';
     openModal({
       media: r.thumb ? imgTag(r.thumb, r.issue) : '',
-      meta: 'Reel · ' + (r.year || ''),
-      title: r.issue || 'Reel',
+      meta: kind + ' · ' + (r.year || ''),
+      title: r.issue || kind,
       desc: r.format || '',
       facts: factsRow('Views', r.views),
       cta: r.video_url ? `<a class="pill dark" href="${esc(r.video_url)}" target="_blank" rel="noopener">Watch video →</a>` : ''
@@ -487,10 +509,14 @@
   async function renderReels(){
     const data = await getJSON('content/reels.json');
     const track = document.getElementById('reelTrack');
+    const vgrid = document.getElementById('videoGrid');
+    const vsub = document.getElementById('videoSub');
     if(!data || !Array.isArray(data.reels)) return;
     reelsData = data.reels;
-    track.innerHTML = reelsData.map((r, i) => `
-      <button class="reel reveal" data-reel="${i}">
+    const verticals = reelsData.filter(r => (r.format || '').includes('Vertical'));
+    const videos = reelsData.filter(r => !(r.format || '').includes('Vertical'));
+    track.innerHTML = verticals.map(r => `
+      <button class="reel reveal" data-reel="${reelsData.indexOf(r)}">
         <span class="reel-thumb">
           ${r.thumb ? imgTag(r.thumb, r.issue) : ''}
           <span class="playbtn">▶</span>
@@ -500,6 +526,18 @@
     track.querySelectorAll('.reel').forEach(btn => {
       btn.addEventListener('click', () => openReelModal(reelsData[Number(btn.dataset.reel)]));
     });
+    vgrid.innerHTML = videos.map(r => `
+      <button class="video reveal" data-reel="${reelsData.indexOf(r)}">
+        <span class="video-thumb">
+          ${r.thumb ? imgTag(r.thumb, r.issue) : ''}
+          <span class="playbtn">▶</span>
+        </span>
+        <span class="video-cap"><span>${esc(r.issue)}</span><span class="meta">${esc(r.format || '')}${r.year ? ' · ' + esc(r.year) : ''}</span></span>
+      </button>`).join('');
+    vgrid.querySelectorAll('.video').forEach(btn => {
+      btn.addEventListener('click', () => openReelModal(reelsData[Number(btn.dataset.reel)]));
+    });
+    vsub.style.display = videos.length ? '' : 'none';
     // Featured reel in hero opens the first reel
     if(reelsData[0]){
       const f = reelsData[0];
@@ -509,6 +547,7 @@
       document.getElementById('featuredReel').addEventListener('click', () => openReelModal(f));
     }
     watchReveals(track);
+    watchReveals(vgrid);
   }
 
   // Carousel arrows
