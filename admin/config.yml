@@ -24,7 +24,14 @@ collections:
               - { label: "Views", name: "views", widget: "string", default: "—" }
               - { label: "Year", name: "year", widget: "string" }
               - { label: "Thumbnail image", name: "thumb", widget: "image", required: false, hint: "Vertical cover shown on the card" }
-              - { label: "Video link", name: "video_url", widget: "string", required: false, hint: "YouTube / TikTok / Behance link — the card opens it when clicked" }
+              - label: "Orientation"
+                name: "orientation"
+                widget: "select"
+                options: ["vertical", "horizontal"]
+                default: "vertical"
+                hint: "Vertical = reels row, horizontal = videos row"
+              - { label: "Video file", name: "video", widget: "string", required: false, hint: "Local path, e.g. videos/my-video.mp4 — plays inside the site" }
+              - { label: "YouTube link or ID", name: "youtube", widget: "string", required: false, hint: "If set, the video plays embedded from YouTube instead of the local file" }
 
   - name: "gallery"
     label: "Gallery — Visualise your cause"
