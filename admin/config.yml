@@ -40,6 +40,7 @@ collections:
             fields:
               - { label: "Image", name: "src", widget: "image" }
               - { label: "Caption", name: "caption", widget: "string" }
+              - { label: "Details (shown in the popup)", name: "details", widget: "text", required: false, hint: "A few lines about the project: client, idea, what it says" }
               - label: "Category"
                 name: "category"
                 widget: "select"
