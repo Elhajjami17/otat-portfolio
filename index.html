@@ -164,10 +164,15 @@
   .reel-cap{display:flex;justify-content:space-between;gap:6px;font-size:14px;align-items:baseline}
   .reel-cap .views{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap}
 
-  /* ---------- VIDEO GRID ---------- */
-  .video-sub{margin:36px 0 14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:20px 14px}
-  .video{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+  /* ---------- VIDEO ROW ---------- */
+  .video-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:36px 0 14px}
+  .video-sub{margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .video-grid{
+    display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+    padding:4px clamp(20px,4vw,48px) 14px;margin:0 calc(-1 * clamp(20px,4vw,48px));
+    scrollbar-width:thin;scrollbar-color:#bdbdb7 transparent;
+  }
+  .video{all:unset;cursor:pointer;flex:0 0 min(320px,80vw);scroll-snap-align:start;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
   .video:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
   .video-thumb{
     display:block;aspect-ratio:16/9;width:100%;position:relative;border:1px solid var(--line);border-radius:4px;
@@ -245,6 +250,9 @@
     min-height:280px;max-height:78vh;
   }
   .modal-media img{width:100%;height:100%;max-height:78vh;object-fit:contain;display:block}
+  .modal-media video{width:100%;max-height:78vh;display:block;background:#000;border-radius:4px}
+  .yt-wrap{position:relative;aspect-ratio:16/9;width:100%;background:#000;border-radius:4px;overflow:hidden}
+  .yt-wrap iframe{position:absolute;inset:0;width:100%;height:100%}
   .modal-body{display:flex;flex-direction:column;gap:12px;padding:8px 4px}
   .modal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
   .modal-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
@@ -349,7 +357,13 @@
   </div>
   <div class="wrap">
     <div class="reel-track" id="reelTrack"></div>
-    <h3 class="video-sub reveal" id="videoSub">More videos</h3>
+    <div class="video-head reveal" id="videoSub">
+      <h3 class="video-sub">More videos</h3>
+      <div class="reel-nav">
+        <button class="round-btn" id="videoPrev" aria-label="Previous videos">←</button>
+        <button class="round-btn" id="videoNext" aria-label="Next videos">→</button>
+      </div>
+    </div>
     <div class="video-grid" id="videoGrid"></div>
   </div>
 </section>
@@ -474,6 +488,8 @@
     document.getElementById('mClose').focus();
   }
   function closeModal(){
+    mMedia.querySelectorAll('video').forEach(v => v.pause());
+    mMedia.querySelectorAll('iframe').forEach(f => { f.src = 'about:blank'; });
     scrim.hidden = true;
     document.body.style.overflow = '';
     if(lastFocus && lastFocus.focus) lastFocus.focus();
@@ -494,15 +510,31 @@
   const catLabels = {campaigns:'Campaigns',posters:'Posters',identity:'Identity',social:'Social',illustration:'Illustration','art-direction':'Art Direction',web:'Web'};
   let reelsData = [];
 
+  function ytId(url){
+    if(!url) return '';
+    const m = String(url).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+    return m ? m[1] : String(url).trim();
+  }
   function openReelModal(r){
-    const kind = (r.format || '').includes('Vertical') ? 'Reel' : 'Video';
+    const kind = r.orientation === 'horizontal' ? 'Video' : 'Reel';
+    let media = '';
+    const yid = ytId(r.youtube);
+    if(yid){
+      media = `<div class="yt-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${yid}?rel=0" title="${esc(r.issue || kind)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+    } else if(r.video){
+      const ext = (r.video.split('.').pop() || 'mp4').toLowerCase();
+      const type = ext === 'webm' ? 'video/webm' : 'video/mp4';
+      media = `<video controls playsinline preload="metadata"${r.thumb ? ` poster="${esc(r.thumb)}"` : ''}><source src="${esc(r.video)}" type="${type}"></video>`;
+    } else if(r.thumb){
+      media = imgTag(r.thumb, r.issue);
+    }
     openModal({
-      media: r.thumb ? imgTag(r.thumb, r.issue) : '',
-      meta: kind + ' · ' + (r.year || ''),
+      media: media,
+      meta: kind + (r.year ? ' · ' + r.year : ''),
       title: r.issue || kind,
       desc: r.format || '',
       facts: factsRow('Views', r.views),
-      cta: r.video_url ? `<a class="pill dark" href="${esc(r.video_url)}" target="_blank" rel="noopener">Watch video →</a>` : ''
+      cta: ''
     });
   }
 
@@ -513,8 +545,8 @@
     const vsub = document.getElementById('videoSub');
     if(!data || !Array.isArray(data.reels)) return;
     reelsData = data.reels;
-    const verticals = reelsData.filter(r => (r.format || '').includes('Vertical'));
-    const videos = reelsData.filter(r => !(r.format || '').includes('Vertical'));
+    const verticals = reelsData.filter(r => r.orientation !== 'horizontal');
+    const videos = reelsData.filter(r => r.orientation === 'horizontal');
     track.innerHTML = verticals.map(r => `
       <button class="reel reveal" data-reel="${reelsData.indexOf(r)}">
         <span class="reel-thumb">
@@ -554,6 +586,9 @@
   const track = document.getElementById('reelTrack');
   document.getElementById('reelPrev').addEventListener('click', () => track.scrollBy({left: -400, behavior: 'smooth'}));
   document.getElementById('reelNext').addEventListener('click', () => track.scrollBy({left: 400, behavior: 'smooth'}));
+  const vtrack = document.getElementById('videoGrid');
+  document.getElementById('videoPrev').addEventListener('click', () => vtrack.scrollBy({left: -680, behavior: 'smooth'}));
+  document.getElementById('videoNext').addEventListener('click', () => vtrack.scrollBy({left: 680, behavior: 'smooth'}));
 
   // ---------- WORK / GALLERY ----------
   const galEmpty = document.getElementById('galEmpty');
