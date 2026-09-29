@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTAT — Visual Stories for Social Change</title>
+<meta name="description" content="I help organisations working for social change turn complex knowledge into visual stories.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FAF6ED;
+    --ivory-deep:#F3EDDF;
+    --sage:#7C8B6F;
+    --sage-deep:#5E6E53;
+    --sage-soft:#E7EBDD;
+    --ink:#1B1B1B;
+    --ink-soft:#4A4A44;
+    --white:#FFFFFF;
+    --radius:26px;
+    --shadow:0 18px 45px rgba(27,27,27,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--ivory);
+    color:var(--ink);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--sage);color:#fff}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  .display{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:1.02}
+  .serif{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;text-transform:none;letter-spacing:0}
+  .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--sage-deep);margin-bottom:14px;
+  }
+  .kicker::before{content:"";width:26px;height:2px;background:var(--sage);border-radius:2px}
+  .sec-title{font-size:clamp(30px,4.4vw,52px);margin-bottom:6px}
+  .sec-sub{color:var(--ink-soft);font-size:clamp(15px,1.6vw,18px);max-width:640px;margin-bottom:36px}
+  section{padding:84px 0}
+
+  /* ---------- NAV ---------- */
+  nav{position:fixed;top:14px;left:0;right:0;z-index:100;pointer-events:none}
+  .nav-pill{
+    pointer-events:auto;
+    max-width:1180px;margin:0 auto;padding:10px 12px 10px 22px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    background:rgba(250,246,237,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(27,27,27,.08);border-radius:999px;
+    box-shadow:0 10px 30px rgba(27,27,27,.07);
+  }
+  .brand{font-family:'Anton',sans-serif;font-size:20px;letter-spacing:.04em;text-decoration:none;color:var(--ink)}
+  .brand em{font-family:'Playfair Display',serif;font-style:italic;color:var(--sage-deep);font-size:15px;letter-spacing:0;margin-left:6px}
+  .nav-links{display:flex;gap:4px;align-items:center}
+  .nav-links a{
+    text-decoration:none;color:var(--ink-soft);font-size:14px;font-weight:600;
+    padding:9px 15px;border-radius:999px;transition:.25s;
+  }
+  .nav-links a:hover{background:var(--sage-soft);color:var(--ink)}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;
+    transition:transform .25s, background .25s;white-space:nowrap;
+  }
+  .btn:hover{background:var(--sage-deep);transform:translateY(-2px)}
+  .btn.sage{background:var(--sage)}
+  .btn.sage:hover{background:var(--sage-deep)}
+  .burger{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:var(--ink)}
+  @media(max-width:860px){
+    .nav-links{display:none;position:absolute;top:64px;left:16px;right:16px;
+      background:var(--white);border-radius:20px;padding:12px;flex-direction:column;align-items:stretch;
+      box-shadow:var(--shadow);border:1px solid rgba(27,27,27,.08)}
+    .nav-links.open{display:flex}
+    .nav-links a{text-align:center}
+    .burger{display:block}
+    .nav-pill .btn{display:none}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{padding:150px 0 70px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+  .hero h1{font-size:clamp(40px,6.4vw,84px);margin:10px 0 20px}
+  .hero h1 .serif{color:var(--sage-deep)}
+  .hero p.lead{font-size:clamp(16px,1.8vw,19px);color:var(--ink-soft);max-width:520px;margin-bottom:30px}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+  .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:#fff}
+  .hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .badge{
+    font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    background:var(--sage-soft);color:var(--sage-deep);
+    padding:8px 16px;border-radius:999px;
+  }
+  .hero-card{
+    background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:34px 30px;position:relative;overflow:hidden;
+    border:1px solid rgba(27,27,27,.06);
+  }
+  .hero-card::after{
+    content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;
+    background:var(--sage-soft);border-radius:50%;
+  }
+  .hero-card h3{font-family:'Anton',sans-serif;font-size:22px;text-transform:uppercase;margin-bottom:14px;position:relative;z-index:1}
+  .mini-row{display:flex;align-items:center;gap:10px;margin:12px 0;position:relative;z-index:1;font-size:14px;font-weight:600}
+  .chip{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--ivory-deep);padding:6px 12px;border-radius:999px}
+  .chip.to{background:var(--sage);color:#fff}
+  .arrow{color:var(--sage-deep);font-weight:700}
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{background:var(--sage);color:#fff;overflow:hidden;padding:14px 0;transform:rotate(-1deg) scale(1.02)}
+  .marquee-track{display:flex;gap:34px;white-space:nowrap;animation:scroll 26s linear infinite;font-family:'Anton',sans-serif;font-size:18px;letter-spacing:.06em;text-transform:uppercase}
+  .marquee-track .serif{font-size:16px}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* ---------- FROM TO ---------- */
+  .ft-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+  .ft-card{
+    background:var(--white);border-radius:var(--radius);padding:28px;
+    border:1px solid rgba(27,27,27,.06);box-shadow:var(--shadow);
+    transition:transform .3s, box-shadow .3s;display:flex;flex-direction:column;gap:12px;
+  }
+  .ft-card:hover{transform:translateY(-6px)}
+  .ft-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .ft-card h3{font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase}
+  .ft-card p.desc{font-size:14.5px;color:var(--ink-soft)}
+  .impact{
+    margin-top:auto;background:var(--ivory);border-radius:16px;padding:14px 16px;font-size:13.5px;
+  }
+  .impact strong{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sage-deep);margin-bottom:4px}
+  .draft-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#a07c2c;background:#faf0d7;padding:5px 12px;border-radius:999px;align-self:flex-start}
+  .soon{opacity:.75;border-style:dashed;background:transparent;box-shadow:none}
+
+  /* ---------- WATCH ---------- */
+  #watch{background:var(--ink);color:var(--ivory);border-radius:36px;margin:0 12px}
+  #watch .sec-sub{color:#c9c4b4}
+  #watch .kicker{color:#b9c7a8}
+  .reels{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:22px}
+  .reel{background:#232323;border-radius:22px;overflow:hidden;transition:transform .3s;border:1px solid rgba(255,255,255,.07)}
+  .reel:hover{transform:translateY(-6px) scale(1.01)}
+  .reel-thumb{aspect-ratio:9/16;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .reel-thumb.t1{background:linear-gradient(160deg,#5E6E53,#2E3A28)}
+  .reel-thumb.t2{background:linear-gradient(160deg,#7C8B6F,#3E4A36)}
+  .reel-thumb.t3{background:linear-gradient(160deg,#9AA583,#4A5540)}
+  .reel-thumb img.thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .reel-thumb .big-issue{
+    font-family:'Playfair Display',serif;font-style:italic;color:rgba(255,255,255,.92);
+    font-size:21px;line-height:1.3;padding:0 22px;text-align:center;
+  }
+  .play{
+    position:absolute;width:58px;height:58px;border-radius:50%;
+    background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;
+    font-size:20px;color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.3);
+  }
+  .reel-meta{padding:16px 18px 18px}
+  .reel-meta dl{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12.5px}
+  .reel-meta dt{font-weight:700;letter-spacing:.1em;font-size:10.5px;color:#8f9a80;text-transform:uppercase;padding-top:2px}
+  .reel-meta dd{color:#e8e4d6;margin:0}
+  .watch-note{margin-top:26px;font-size:13.5px;color:#a09a86;text-align:center}
+
+  /* ---------- GALLERY ---------- */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+  .filter{
+    border:2px solid var(--ink);background:transparent;color:var(--ink);
+    font-weight:700;font-size:13px;padding:9px 20px;border-radius:999px;cursor:pointer;transition:.25s;
+  }
+  .filter:hover{background:var(--sage-soft);border-color:var(--sage-deep)}
+  .filter.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+  .g-item{
+    border-radius:20px;overflow:hidden;background:var(--white);
+    border:1px solid rgba(27,27,27,.06);box-shadow:var(--shadow);
+    transition:transform .3s, opacity .4s;
+  }
+  .g-item:hover{transform:translateY(-5px)}
+  .g-item img{width:100%;height:300px;object-fit:cover;display:block}
+  .g-item .g-cap{padding:14px 18px;font-size:13px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .g-item .g-cap span.cat{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage-deep);font-weight:700}
+  .g-item.hide{display:none}
+  .gal-empty{display:none;text-align:center;color:var(--ink-soft);padding:30px;font-style:italic}
+
+  /* ---------- IMPACT ---------- */
+  .impact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+  .impact-card{background:var(--sage);color:#fff;border-radius:var(--radius);padding:30px;position:relative;overflow:hidden}
+  .impact-card:nth-child(2){background:var(--sage-deep)}
+  .impact-card:nth-child(3){background:var(--ink)}
+  .impact-card h3{font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase;margin-bottom:10px}
+  .impact-card p{font-size:14.5px;color:rgba(255,255,255,.88)}
+  .impact-note{margin-top:22px;font-size:13px;color:var(--ink-soft);font-style:italic}
+
+  /* ---------- CTA ---------- */
+  .cta{background:var(--ivory-deep);border-radius:36px;margin:0 12px 12px;text-align:center;padding:90px 24px}
+  .cta h2{font-size:clamp(30px,5vw,60px);margin-bottom:14px}
+  .cta h2 .serif{color:var(--sage-deep)}
+  .cta p{color:var(--ink-soft);margin-bottom:30px;font-size:17px}
+  .cta .btn{font-size:16px;padding:16px 36px}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:40px 0 50px;text-align:center}
+  footer .foot-line{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px}
+  .foot-links{display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+  .foot-links a{color:var(--sage-deep);font-weight:600;font-size:14px;text-decoration:none;border-bottom:2px solid var(--sage-soft);padding-bottom:2px}
+  .foot-links a:hover{border-color:var(--sage-deep)}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:none}
+  .doodle{position:absolute;pointer-events:none;opacity:.5}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-pill">
+    <a class="brand" href="#top">OTAT<em>visual stories</em></a>
+    <button class="burger" id="burger" aria-label="Menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#from-to">From → To</a>
+      <a href="#watch">Watch</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#impact">Impact</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="btn sage" href="#contact">Get in touch →</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="kicker">Portfolio — Social Change</span>
+      <h1 class="display">I help organisations working for <span class="serif">social change</span> turn complex knowledge into <span class="serif">visual stories.</span></h1>
+      <p class="lead">Giving life to a cause's content: from dry or complex material to content people understand, share and remember — without losing the message.</p>
+      <div class="hero-ctas">
+        <a class="btn sage" href="#watch">Watch the work →</a>
+        <a class="btn ghost" href="#gallery">Browse the gallery</a>
+      </div>
+      <div class="hero-badges">
+        <span class="badge">Video</span>
+        <span class="badge">Animation</span>
+        <span class="badge">Campaigns</span>
+        <span class="badge">Publications</span>
+        <span class="badge">Social content</span>
+      </div>
+    </div>
+    <div class="hero-card reveal">
+      <h3 class="display">From → To</h3>
+      <div class="mini-row"><span class="chip">Report</span><span class="arrow">→</span><span class="chip to">Animation</span></div>
+      <div class="mini-row"><span class="chip">Archive</span><span class="arrow">→</span><span class="chip to">Digital experience</span></div>
+      <div class="mini-row"><span class="chip">Complex issue</span><span class="arrow">→</span><span class="chip to">Short video</span></div>
+      <div class="mini-row"><span class="chip">Event</span><span class="arrow">→</span><span class="chip to">Short film</span></div>
+      <div class="mini-row"><span class="chip">Research</span><span class="arrow">→</span><span class="chip to">Visual publication</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Visual stories</span><span class="serif">for</span><span>Social change</span><span class="serif">—</span>
+    <span>Reports → Film</span><span class="serif">—</span><span>Archives → Experience</span><span class="serif">—</span>
+    <span>Research → Publications</span><span class="serif">—</span>
+    <span>Visual stories</span><span class="serif">for</span><span>Social change</span><span class="serif">—</span>
+    <span>Reports → Film</span><span class="serif">—</span><span>Archives → Experience</span><span class="serif">—</span>
+    <span>Research → Publications</span><span class="serif">—</span>
+  </div>
+</div>
+
+<section id="from-to">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="kicker">Case studies</span>
+      <h2 class="display sec-title">From <span class="serif">→</span> To</h2>
+      <p class="sec-sub"><span class="serif">Transforming complexity into visual stories.</span> Each case starts from dense material and ends with something people can see, feel and share.</p>
+    </div>
+    <div class="ft-grid" id="ftGrid">
+    </div>
+  </div>
+</section>
+
+<section id="watch">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="kicker">Video</span>
+      <h2 class="display sec-title">Make it <span class="serif">watchable</span></h2>
+      <p class="sec-sub"><span class="serif">Turning important issues into content people actually watch.</span> Vertical-first, built for the feed.</p>
+    </div>
+    <div class="reels" id="reelsGrid">
+    </div>
+    <p class="watch-note">More reels are being added — each with its issue, format, views and year.</p>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="kicker">Selected work</span>
+      <h2 class="display sec-title">Visualise <span class="serif">your cause</span></h2>
+      <p class="sec-sub"><span class="serif">A selection of visual work for social change.</span> Filter by type of work.</p>
+    </div>
+    <div class="filters reveal" id="filters">
+      <button class="filter active" data-filter="all">All</button>
+      <button class="filter" data-filter="campaigns">Campaigns</button>
+      <button class="filter" data-filter="posters">Posters</button>
+      <button class="filter" data-filter="identity">Identity</button>
+      <button class="filter" data-filter="social">Social</button>
+      <button class="filter" data-filter="illustration">Illustration</button>
+      <button class="filter" data-filter="art-direction">Art Direction</button>
+      <button class="filter" data-filter="web">Web</button>
+    </div>
+    <div class="gal-grid" id="galGrid">
+    </div>
+    <p class="gal-empty" id="galEmpty">More work in this category is on its way.</p>
+  </div>
+</section>
+
+<section id="impact">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="kicker">Why it matters</span>
+      <h2 class="display sec-title">The <span class="serif">impact</span></h2>
+      <p class="sec-sub">What changes because of the work — in plain language, not vanity metrics.</p>
+    </div>
+    <div class="impact-grid" id="impactGrid">
+    </div>
+    <p class="impact-note reveal" id="impactNote">Figures (views, reach, organisations) are published here only when verified.</p>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="wrap reveal">
+    <h2 class="display">Got something <span class="serif">complex?</span><br>Let's turn it into something people <span class="serif">can see.</span></h2>
+    <p>For nonprofits, cultural organisations and everyone working for social change.</p>
+    <a class="btn" href="mailto:m.marwanelhajjami@gmail.com">Get in touch →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="foot-line">Ideas deserve to be seen.</p>
+    <div class="foot-links">
+      <a href="mailto:m.marwanelhajjami@gmail.com">m.marwanelhajjami@gmail.com</a>
+      <a href="https://www.behance.net/mmarwanelh8908" target="_blank" rel="noopener">Behance</a>
+      <a href="https://www.linkedin.com/in/otat/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Reveal on scroll (also works for content added later)
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  function watchReveals(root){ root.querySelectorAll('.reveal:not(.visible)').forEach(el => io.observe(el)); }
+
+  function esc(s){ return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  async function getJSON(path){
+    try { const r = await fetch(path, {cache:'no-store'}); if(!r.ok) throw new Error('http'); return await r.json(); }
+    catch(e){ return null; }
+  }
+
+  // ---------- FROM -> TO ----------
+  async function renderCases(){
+    const data = await getJSON('content/cases.json');
+    const grid = document.getElementById('ftGrid');
+    if(!data || !Array.isArray(data.cases)) return;
+    grid.innerHTML = data.cases.map(c => {
+      const status = c.status || 'published';
+      const tag = status === 'draft' ? '<span class="draft-tag">Draft — refining soon</span>'
+                : status === 'coming-soon' ? '<span class="draft-tag">Coming soon</span>' : '';
+      return `<article class="ft-card reveal${status === 'coming-soon' ? ' soon' : ''}">
+        ${tag}
+        <div class="ft-top"><span class="chip">${esc(c.from)}</span><span class="arrow">→</span><span class="chip to">${esc(c.to)}</span></div>
+        <h3>${esc(c.title)}</h3>
+        <p class="desc">${esc(c.description)}</p>
+        <div class="impact"><strong>What changed because of the work?</strong>${esc(c.impact)}</div>
+      </article>`;
+    }).join('');
+    watchReveals(grid);
+  }
+
+  // ---------- REELS ----------
+  const thumbTones = ['t1','t2','t3'];
+  async function renderReels(){
+    const data = await getJSON('content/reels.json');
+    const grid = document.getElementById('reelsGrid');
+    if(!data || !Array.isArray(data.reels)) return;
+    grid.innerHTML = data.reels.map((r, i) => {
+      const thumb = r.thumb
+        ? `<img class="thumb" src="${esc(r.thumb)}" alt="${esc(r.issue)}" loading="lazy">`
+        : `<p class="big-issue">${esc(r.issue)}</p>`;
+      const body = `<article class="reel reveal">
+        <div class="reel-thumb ${r.thumb ? '' : thumbTones[i % thumbTones.length]}">
+          ${thumb}
+          <div class="play">▶</div>
+        </div>
+        <div class="reel-meta">
+          <dl>
+            <dt>Issue</dt><dd>${esc(r.issue)}</dd>
+            <dt>Format</dt><dd>${esc(r.format)}</dd>
+            <dt>Views</dt><dd>${esc(r.views)}</dd>
+            <dt>Year</dt><dd>${esc(r.year)}</dd>
+          </dl>
+        </div>
+      </article>`;
+      return r.video_url
+        ? `<a href="${esc(r.video_url)}" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit">${body}</a>`
+        : body;
+    }).join('');
+    watchReveals(grid);
+  }
+
+  // ---------- GALLERY ----------
+  const catLabels = {campaigns:'Campaigns',posters:'Posters',identity:'Identity',social:'Social',illustration:'Illustration','art-direction':'Art Direction',web:'Web'};
+  const galEmpty = document.getElementById('galEmpty');
+  function bindFilters(){
+    const filters = document.querySelectorAll('.filter');
+    filters.forEach(btn => {
+      btn.onclick = () => {
+        filters.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        let visible = 0;
+        document.querySelectorAll('.g-item').forEach(it => {
+          const show = f === 'all' || it.dataset.cat === f;
+          it.classList.toggle('hide', !show);
+          if(show) visible++;
+        });
+        galEmpty.style.display = visible === 0 ? 'block' : 'none';
+      };
+    });
+  }
+  async function renderGallery(){
+    const data = await getJSON('content/gallery.json');
+    const grid = document.getElementById('galGrid');
+    if(!data || !Array.isArray(data.items)) return;
+    grid.innerHTML = data.items.map(g => `
+      <figure class="g-item reveal" data-cat="${esc(g.category)}">
+        <img src="${esc(g.src)}" alt="${esc(g.caption)}" loading="lazy">
+        <figcaption class="g-cap">${esc(g.caption)} <span class="cat">${esc(catLabels[g.category] || g.category)}</span></figcaption>
+      </figure>`).join('');
+    watchReveals(grid);
+  }
+
+  // ---------- IMPACT ----------
+  async function renderImpact(){
+    const data = await getJSON('content/impact.json');
+    const grid = document.getElementById('impactGrid');
+    if(!data || !Array.isArray(data.cards)) return;
+    grid.innerHTML = data.cards.map(c => `
+      <div class="impact-card reveal">
+        <h3>${esc(c.title)}</h3>
+        <p>${esc(c.text)}</p>
+      </div>`).join('');
+    const note = document.getElementById('impactNote');
+    if(note && data.note) note.textContent = data.note;
+    watchReveals(grid);
+  }
+
+  bindFilters();
+  renderCases();
+  renderReels();
+  renderGallery();
+  renderImpact();
+  watchReveals(document);
+</script>
+</body>
+</html>
