@@ -32,6 +32,7 @@ collections:
                 hint: "Vertical = reels row, horizontal = videos row"
               - { label: "Video file", name: "video", widget: "string", required: false, hint: "Local path, e.g. videos/my-video.mp4 — plays inside the site" }
               - { label: "YouTube link or ID", name: "youtube", widget: "string", required: false, hint: "If set, the video plays embedded from YouTube instead of the local file" }
+              - { label: "Vimeo link or ID", name: "vimeo", widget: "string", required: false, hint: "If set, the video plays embedded from Vimeo instead of the local file" }
 
   - name: "gallery"
     label: "Gallery — Visualise your cause"

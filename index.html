@@ -335,7 +335,7 @@
     </div>
     <button class="featured reveal" id="featuredReel" aria-label="Open featured reel">
       <img id="featuredImg" src="images/reel-abolition.jpg" alt="Featured reel thumbnail">
-      <span class="tag">featured reel · 9:16</span>
+      <span class="tag">random pick · from the archive</span>
       <span class="playbtn">▶</span>
       <span class="cap"><span id="featuredIssue">150th anniversary of the abolition of slavery in the Netherlands</span><span class="yr" id="featuredYear">2023</span></span>
     </button>
@@ -406,7 +406,7 @@
   </div>
 </section>
 
-<section id="from-to">
+<section id="from-to" style="display:none"><!-- temporarily hidden 2026-09-30; restore by removing style -->
   <div class="wrap">
     <div class="sec-head reveal">
       <div>
@@ -433,13 +433,13 @@
 
 <section id="contact">
   <div class="wrap reveal">
-    <h2 class="big">Got a complex story?<br>Let's make it visual.</h2>
+    <h2 class="big">Got a complex story?<br>Let's make it visual</h2>
     <div class="contact-row">
       <a class="pill dark" href="mailto:m.marwanelhajjami@gmail.com">m.marwanelhajjami@gmail.com →</a>
       <a class="slink" href="https://www.linkedin.com/in/otat/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
     <div class="foot">
-      <span>© 2026 Marwan</span>
+      <span>© 2026 MARWAN</span>
     </div>
   </div>
 </section>
@@ -536,11 +536,19 @@
     const m = String(url).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
     return m ? m[1] : String(url).trim();
   }
+  function vimeoId(url){
+    if(!url) return '';
+    const m = String(url).match(/vimeo\.com\/(?:video\/)?(\d{6,})/);
+    return m ? m[1] : String(url).trim();
+  }
   function openReelModal(r){
     const kind = r.orientation === 'horizontal' ? 'Video' : 'Reel';
     let media = '';
     const yid = ytId(r.youtube);
-    if(yid){
+    const vid = vimeoId(r.vimeo);
+    if(vid){
+      media = `<div class="yt-wrap"><iframe src="https://player.vimeo.com/video/${vid}" title="${esc(r.issue || kind)}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+    } else if(yid){
       media = `<div class="yt-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${yid}?rel=0" title="${esc(r.issue || kind)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
     } else if(r.video){
       const ext = (r.video.split('.').pop() || 'mp4').toLowerCase();
@@ -591,9 +599,9 @@
       btn.addEventListener('click', () => openReelModal(reelsData[Number(btn.dataset.reel)]));
     });
     vsub.style.display = videos.length ? '' : 'none';
-    // Featured reel in hero opens the first reel
-    if(reelsData[0]){
-      const f = reelsData[0];
+    // Featured reel in hero: random vertical pick, reshuffled on every load
+    if(verticals.length){
+      const f = verticals[Math.floor(Math.random() * verticals.length)];
       document.getElementById('featuredImg').src = f.thumb || 'images/reel-abolition.jpg';
       document.getElementById('featuredIssue').textContent = f.issue || '';
       document.getElementById('featuredYear').textContent = f.year || '';
