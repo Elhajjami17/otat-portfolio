@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OTAT: Visual Stories for Social Change</title>
+<title>MARWAN: Visual Stories for Social Change</title>
 <meta name="description" content="Hi, I'm Marwan. I help NGOs transform complex topics into accessible visual stories and engaging content.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
 <link rel="apple-touch-icon" href="favicon-180.png">
 <meta property="og:type" content="website">
-<meta property="og:title" content="OTAT: Visual Stories for Social Change">
+<meta property="og:title" content="MARWAN: Visual Stories for Social Change">
 <meta property="og:description" content="Hi, I'm Marwan. I help NGOs transform complex topics into accessible visual stories and engaging content.">
 <meta property="og:url" content="https://hajjami.netlify.app/">
 <meta property="og:image" content="https://hajjami.netlify.app/og-image.jpg">
@@ -44,9 +44,10 @@
   #clients{padding-top:30px;padding-bottom:30px}
   .client-row{display:flex;flex-wrap:wrap;gap:14px 34px;margin-top:16px;align-items:center}
   .client-row img{height:46px;width:auto;filter:grayscale(1);opacity:.72;transition:filter .25s,opacity .25s}
+  .client-row img.logo-tni{height:66px}
   .client-row img:hover{filter:none;opacity:1}
   .client-row span{font-size:19px;font-weight:600;letter-spacing:.03em;color:var(--muted);white-space:nowrap}
-  @media(max-width:640px){.client-row{gap:12px 22px}.client-row img{height:38px}.client-row span{font-size:16px;white-space:normal}}
+  @media(max-width:640px){.client-row{gap:12px 22px}.client-row img{height:38px}.client-row img.logo-tni{height:54px}.client-row span{font-size:16px;white-space:normal}}
   section{padding-top:52px;padding-bottom:52px;border-top:1px solid var(--line)}
   h1,h2,h3{font-weight:500;text-transform:uppercase;line-height:1.08;text-wrap:balance}
   .kicker{
@@ -207,7 +208,8 @@
   .video-cap .meta{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px}
 
   /* ---------- FROM TO ---------- */
-  .ft-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
+  .ft-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:900px){.ft-grid{grid-template-columns:1fr}}
   .ft-card{
     border:1px solid var(--line);border-radius:4px;padding:22px;
     display:flex;flex-direction:column;gap:12px;background:transparent;
@@ -239,6 +241,10 @@
     aspect-ratio:4/5;max-width:340px;width:100%;border:1px solid var(--line);border-radius:4px;
     background:var(--card);display:flex;align-items:center;justify-content:center;
     font-weight:600;font-size:clamp(40px,5vw,64px);letter-spacing:.04em;
+  }
+  .about-photo{
+    aspect-ratio:4/5;max-width:340px;width:100%;object-fit:cover;
+    border:1px solid var(--line);border-radius:4px;justify-self:center;
   }
   .about-copy{display:flex;flex-direction:column;gap:16px;max-width:560px}
   .about-copy p{font-size:18px;line-height:1.55;text-wrap:pretty}
@@ -299,7 +305,7 @@
 
 <nav>
   <div class="nav-inner">
-    <a class="brand" href="#top">OTAT</a>
+    <a class="brand" href="#top">MARWAN</a>
     <div class="nav-links">
       <a href="#work">Work</a>
       <a href="#reels">Reels</a>
@@ -319,7 +325,7 @@
 <header id="top">
   <div class="wrap hero-grid" style="padding-top:clamp(40px,7vw,88px);padding-bottom:56px">
     <div class="hero-copy reveal">
-      <span class="kicker">OTAT, visual storyteller</span>
+      <span class="kicker">MARWAN, visual storyteller</span>
       <h1>Hi, I'm Marwan. I help NGOs transform complex topics into accessible visual stories and engaging content.</h1>
       <p class="lead">Videos, illustrations and campaigns for NGOs, research institutes and cultural organisations.</p>
       <div class="hero-ctas">
@@ -341,7 +347,7 @@
     <p class="kicker">Worked with</p>
     <div class="client-row">
       <img src="images/logos/amnesty.png" alt="Amnesty International" loading="lazy">
-      <img src="images/logos/tni.png" alt="Transnational Institute" loading="lazy">
+      <img src="images/logos/tni.png" alt="Transnational Institute" loading="lazy" class="logo-tni">
       <img src="images/logos/jeem.png" alt="Jeem.me" loading="lazy">
       <img src="images/logos/ita.png" alt="Internationaal Theater Amsterdam" loading="lazy">
       <img src="images/logos/balacona.png" alt="Balacona" loading="lazy">
@@ -363,10 +369,9 @@
         <button class="chip" data-filter="campaigns">Campaigns</button>
         <button class="chip" data-filter="posters">Posters</button>
         <button class="chip" data-filter="identity">Identity</button>
-        <button class="chip" data-filter="social">Social</button>
         <button class="chip" data-filter="illustration">Illustration</button>
-        <button class="chip" data-filter="art-direction">Art Direction</button>
-        <button class="chip" data-filter="web">Web</button>
+        <button class="chip" data-filter="collage">Collage</button>
+        <button class="chip" data-filter="report">Report/magazin</button>
       </div>
     </div>
     <div class="work-grid" id="workGrid"></div>
@@ -414,44 +419,27 @@
   </div>
 </section>
 
-<section id="impact">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div>
-        <span class="kicker">Why it matters</span>
-        <h2 class="sec-title">The <em>impact</em></h2>
-        <p class="sec-sub">What changes because of the work, in plain language, not vanity metrics.</p>
-      </div>
-    </div>
-    <div class="impact-grid" id="impactGrid"></div>
-    <p class="impact-note reveal" id="impactNote"></p>
-  </div>
-</section>
-
 <section id="about">
   <div class="wrap about-grid">
-    <div class="monogram reveal">OTAT</div>
+    <img class="about-photo reveal" src="images/marwan.jpg" alt="Portrait of Marwan">
     <div class="about-copy reveal">
       <span class="kicker">About me</span>
       <h2 class="sec-title">Visual stories, <em>built to be shared</em></h2>
-      <p>I'm OTAT, a visual storyteller based in Amsterdam. I work with research institutes, NGOs and cultural organisations, translating reports, archives and complex issues into videos, illustrations and experiences people actually want to engage with.</p>
-      <p class="mono-line">Based in Amsterdam · Working worldwide · Arabic, English, French</p>
+      <p>I'm Marwan, a visual storyteller based in Amsterdam. I work with research institutes, NGOs and cultural organisations, translating reports, archives and complex issues into videos, illustrations and experiences people actually want to engage with.</p>
+      <p class="mono-line">Moroccan based in Amsterdam · Working worldwide · Arabic, English, French</p>
     </div>
   </div>
 </section>
 
 <section id="contact">
   <div class="wrap reveal">
-    <h2 class="big">Got something complex?<br>Let's make it visible.</h2>
-    <p class="sub">Open for campaigns, explainer films and report visualisation.</p>
+    <h2 class="big">Got a complex story?<br>Let's make it visual.</h2>
     <div class="contact-row">
       <a class="pill dark" href="mailto:m.marwanelhajjami@gmail.com">m.marwanelhajjami@gmail.com →</a>
-      <a class="slink" href="https://www.behance.net/mmarwanelh8908" target="_blank" rel="noopener">Behance</a>
       <a class="slink" href="https://www.linkedin.com/in/otat/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
     <div class="foot">
-      <span class="line">Ideas deserve to be seen.</span>
-      <span>© 2026 OTAT</span>
+      <span>© 2026 Marwan</span>
     </div>
   </div>
 </section>
@@ -540,7 +528,7 @@
   }
 
   // ---------- REELS ----------
-  const catLabels = {campaigns:'Campaigns',posters:'Posters',identity:'Identity',social:'Social',illustration:'Illustration','art-direction':'Art Direction',web:'Web'};
+  const catLabels = {campaigns:'Campaigns',posters:'Posters',identity:'Identity',illustration:'Illustration',collage:'Collage',report:'Report/magazin'};
   let reelsData = [];
 
   function ytId(url){
@@ -567,7 +555,7 @@
       title: r.issue || kind,
       desc: r.format || '',
       facts: factsRow('Views', r.views),
-      cta: ''
+      cta: r.original ? `<a class="pill line" href="${esc(r.original)}" target="_blank" rel="noopener">Watch original →</a>` : ''
     });
   }
 
@@ -688,26 +676,10 @@
     watchReveals(grid);
   }
 
-  // ---------- IMPACT ----------
-  async function renderImpact(){
-    const data = await getJSON('content/impact.json');
-    const grid = document.getElementById('impactGrid');
-    if(!data || !Array.isArray(data.cards)) return;
-    grid.innerHTML = data.cards.map(c => `
-      <div class="impact-card reveal">
-        <h3>${esc(c.title)}</h3>
-        <p>${esc(c.text)}</p>
-      </div>`).join('');
-    const note = document.getElementById('impactNote');
-    if(note && data.note) note.textContent = data.note;
-    watchReveals(grid);
-  }
-
   bindFilters();
   renderReels();
   renderWork();
   renderCases();
-  renderImpact();
   watchReveals(document);
 </script>
 </body>
