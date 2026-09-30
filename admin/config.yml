@@ -55,10 +55,9 @@ collections:
                   - { label: "Campaigns", value: "campaigns" }
                   - { label: "Posters", value: "posters" }
                   - { label: "Identity", value: "identity" }
-                  - { label: "Social", value: "social" }
                   - { label: "Illustration", value: "illustration" }
-                  - { label: "Art Direction", value: "art-direction" }
-                  - { label: "Web", value: "web" }
+                  - { label: "Collage", value: "collage" }
+                  - { label: "Report/magazin", value: "report" }
 
   - name: "cases"
     label: "Case studies — From → To"
