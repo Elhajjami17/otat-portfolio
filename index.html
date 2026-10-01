@@ -109,9 +109,9 @@
   }
   .featured img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .featured .tag{
-    position:absolute;top:14px;left:0;right:0;text-align:center;
-    font-family:'JetBrains Mono',monospace;font-size:11px;color:#fff;
-    text-shadow:0 1px 8px rgba(0,0,0,.5);
+    position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:#fff;white-space:nowrap;
+    background:rgba(29,29,27,.82);padding:6px 12px;border-radius:999px;
   }
   .featured .playbtn{
     position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -335,7 +335,7 @@
     </div>
     <button class="featured reveal" id="featuredReel" aria-label="Open featured reel">
       <img id="featuredImg" src="images/reel-abolition.jpg" alt="Featured reel thumbnail">
-      <span class="tag">random pick · from the archive</span>
+      <span class="tag">random pick from my portfolio</span>
       <span class="playbtn">▶</span>
       <span class="cap"><span id="featuredIssue">150th anniversary of the abolition of slavery in the Netherlands</span><span class="yr" id="featuredYear">2023</span></span>
     </button>
